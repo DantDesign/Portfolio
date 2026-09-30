@@ -19,7 +19,6 @@ if (menuButton && navigation) {
 
   });
 
-
   navLinks.forEach(link => {
 
     link.addEventListener("click", () => {
@@ -38,7 +37,6 @@ if (menuButton && navigation) {
 }
 
 
-
 /* =====================================================
    PORTFOLIO FILTER
 ===================================================== */
@@ -53,23 +51,16 @@ filters.forEach(filter => {
     const selectedCategory =
       filter.dataset.filter;
 
-
-    /* Cambiar botón activo */
-
     filters.forEach(button => {
       button.classList.remove("active");
     });
 
     filter.classList.add("active");
 
-
-    /* Filtrar proyectos */
-
     projects.forEach(project => {
 
       const category =
         project.dataset.category;
-
 
       if (
         selectedCategory === "all" ||
@@ -77,13 +68,11 @@ filters.forEach(filter => {
       ) {
 
         project.classList.remove("hide");
-
         project.classList.add("show");
 
       } else {
 
         project.classList.remove("show");
-
         project.classList.add("hide");
 
       }
@@ -93,7 +82,6 @@ filters.forEach(filter => {
   });
 
 });
-
 
 
 /* =====================================================
@@ -107,7 +95,6 @@ const elementsToReveal = document.querySelectorAll(
 elementsToReveal.forEach(element => {
   element.classList.add("reveal");
 });
-
 
 const revealObserver = new IntersectionObserver(
   entries => {
@@ -132,13 +119,9 @@ const revealObserver = new IntersectionObserver(
   }
 );
 
-
 elementsToReveal.forEach(element => {
-
   revealObserver.observe(element);
-
 });
-
 
 
 /* =====================================================
@@ -152,7 +135,6 @@ const sections = document.querySelectorAll(
 const navigationLinks =
   document.querySelectorAll(".nav-link");
 
-
 const sectionObserver = new IntersectionObserver(
   entries => {
 
@@ -163,7 +145,6 @@ const sectionObserver = new IntersectionObserver(
         const currentId =
           entry.target.getAttribute("id");
 
-
         navigationLinks.forEach(link => {
 
           link.classList.remove("active");
@@ -172,7 +153,9 @@ const sectionObserver = new IntersectionObserver(
             link.getAttribute("href") ===
             `#${currentId}`
           ) {
+
             link.classList.add("active");
+
           }
 
         });
@@ -187,13 +170,9 @@ const sectionObserver = new IntersectionObserver(
   }
 );
 
-
 sections.forEach(section => {
-
   sectionObserver.observe(section);
-
 });
-
 
 
 /* =====================================================
@@ -219,7 +198,6 @@ if (backToTop) {
 }
 
 
-
 /* =====================================================
    PROJECT MODAL
 ===================================================== */
@@ -232,7 +210,6 @@ const modalOverlay =
 
 const modalClose =
   document.getElementById("modalClose");
-
 
 const modalTitle =
   document.getElementById("modalTitle");
@@ -266,7 +243,6 @@ const modalGalleryTwo =
 
 const modalProjectLink =
   document.getElementById("modalProjectLink");
-
 
 
 /* =====================================================
@@ -307,7 +283,6 @@ function loadChartJS() {
       return;
     }
 
-
     const script =
       document.createElement("script");
 
@@ -332,20 +307,17 @@ function loadChartJS() {
 }
 
 
-
 /* =====================================================
    FINANCIAL DATA
 ===================================================== */
 
 const financeCharts = {};
-
 const financeDataCache = {};
 
 
-
-/* -----------------------------------------------------
-   Cargar JSON
------------------------------------------------------ */
+/* =====================================================
+   CARGAR JSON
+===================================================== */
 
 async function loadFinanceJSON(filename) {
 
@@ -373,38 +345,15 @@ async function loadFinanceJSON(filename) {
 }
 
 
-
-/* -----------------------------------------------------
-   Convertir JSON orient="index"
-
-   Ejemplo real:
-
-   {
-     "2015-01-31": {
-       "S&P 500": 100,
-       "Gold": 100,
-       "Bitcoin": 100,
-       "Bonds": 100
-     }
-   }
-
-   Lo convertimos en:
-
-   [
-     {
-       date: "2015-01-31",
-       "S&P 500": 100,
-       ...
-     }
-   ]
------------------------------------------------------ */
+/* =====================================================
+   NORMALIZAR JSON
+===================================================== */
 
 function normalizeTimeSeries(data) {
 
   if (Array.isArray(data)) {
     return data;
   }
-
 
   return Object.entries(data)
     .map(([date, values]) => {
@@ -427,27 +376,21 @@ function normalizeTimeSeries(data) {
 }
 
 
-
 /* =====================================================
    COLORES
 ===================================================== */
 
 const financeAssetColors = {
 
-  "S&P 500":
-    "#9A6658",
+  "S&P 500": "#9A6658",
 
-  "Gold":
-    "#B89A5A",
+  "Gold": "#B89A5A",
 
-  "Bitcoin":
-    "#777777",
+  "Bitcoin": "#777777",
 
-  "Bonds":
-    "#B7B2AC"
+  "Bonds": "#B7B2AC"
 
 };
-
 
 
 /* =====================================================
@@ -467,16 +410,14 @@ function formatPercent(value) {
   }
 
   return (
-    Number(value)
-      .toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }) +
+    Number(value).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) +
     "%"
   );
 
 }
-
 
 
 /* =====================================================
@@ -486,26 +427,18 @@ function formatPercent(value) {
 function createFinanceAnalysis() {
 
   let financeContainer =
-    document.querySelector(
-      ".finance-analysis"
-    );
-
+    document.querySelector(".finance-analysis");
 
   if (financeContainer) {
     return financeContainer;
   }
 
-
   const modalContainer =
-    document.querySelector(
-      ".modal-container"
-    );
-
+    document.querySelector(".modal-container");
 
   if (!modalContainer) {
     return null;
   }
-
 
   financeContainer =
     document.createElement("section");
@@ -513,8 +446,9 @@ function createFinanceAnalysis() {
   financeContainer.className =
     "finance-analysis";
 
-
   financeContainer.innerHTML = `
+
+    <!-- INTRO -->
 
     <div class="finance-intro">
 
@@ -528,22 +462,44 @@ function createFinanceAnalysis() {
 
       <p>
         Monthly analysis of four asset classes
-        using historical price data and
+        using historical price data,
+        performance metrics and
         inflation-adjusted measurements.
       </p>
 
+      <div class="finance-tags">
+
+        <span>Python</span>
+        <span>Data Analysis</span>
+        <span>Data Visualization</span>
+        <span>JavaScript</span>
+
+      </div>
+
     </div>
 
+
+    <!-- PERFORMANCE -->
 
     <div class="finance-summary">
 
       <div class="finance-summary-header">
 
-        <span>01</span>
+        <span class="finance-section-number">
+          01
+        </span>
 
-        <h4>
-          Performance & Risk
-        </h4>
+        <div>
+
+          <span class="finance-eyebrow">
+            PERFORMANCE & RISK
+          </span>
+
+          <h4>
+            Asset performance
+          </h4>
+
+        </div>
 
       </div>
 
@@ -558,30 +514,19 @@ function createFinanceAnalysis() {
 
               <th>Asset</th>
 
-              <th>
-                Nominal Return
-              </th>
+              <th>Nominal Return</th>
 
-              <th>
-                Real Return
-              </th>
+              <th>Real Return</th>
 
-              <th>
-                Volatility
-              </th>
+              <th>Volatility</th>
 
-              <th>
-                Max Drawdown
-              </th>
+              <th>Max Drawdown</th>
 
             </tr>
 
           </thead>
 
-
-          <tbody id="financeSummaryBody">
-
-          </tbody>
+          <tbody id="financeSummaryBody"></tbody>
 
         </table>
 
@@ -590,13 +535,21 @@ function createFinanceAnalysis() {
     </div>
 
 
+    <!-- GROWTH -->
+
     <div class="finance-chart-section">
 
       <div class="finance-chart-heading">
 
-        <span>02</span>
+        <span class="finance-section-number">
+          02
+        </span>
 
         <div>
+
+          <span class="finance-eyebrow">
+            PERFORMANCE
+          </span>
 
           <h4>
             Growth of $100
@@ -611,57 +564,68 @@ function createFinanceAnalysis() {
 
       </div>
 
-
       <div class="finance-chart">
 
-        <canvas
-          id="growthChart"
-        ></canvas>
+        <canvas id="growthChart"></canvas>
 
       </div>
 
     </div>
 
 
+    <!-- REAL GROWTH -->
+
     <div class="finance-chart-section">
 
       <div class="finance-chart-heading">
 
-        <span>03</span>
+        <span class="finance-section-number">
+          03
+        </span>
 
         <div>
+
+          <span class="finance-eyebrow">
+            INFLATION ADJUSTED
+          </span>
 
           <h4>
             Real Growth
           </h4>
 
           <p>
-            Growth adjusted for inflation.
+            Growth adjusted for inflation
+            using the CPI data from the analysis.
           </p>
 
         </div>
 
       </div>
 
-
       <div class="finance-chart">
 
-        <canvas
-          id="realGrowthChart"
-        ></canvas>
+        <canvas id="realGrowthChart"></canvas>
 
       </div>
 
     </div>
 
 
+    <!-- DRAWDOWN -->
+
     <div class="finance-chart-section">
 
       <div class="finance-chart-heading">
 
-        <span>04</span>
+        <span class="finance-section-number">
+          04
+        </span>
 
         <div>
+
+          <span class="finance-eyebrow">
+            RISK
+          </span>
 
           <h4>
             Drawdown
@@ -676,55 +640,89 @@ function createFinanceAnalysis() {
 
       </div>
 
-
       <div class="finance-chart">
 
-        <canvas
-          id="drawdownChart"
-        ></canvas>
+        <canvas id="drawdownChart"></canvas>
 
       </div>
 
     </div>
 
 
+    <!-- READING -->
+
     <div class="finance-reading">
 
-      <span class="finance-eyebrow">
-        READING
-      </span>
+      <div class="finance-reading-label">
 
-      <h4>
-        What the data shows
-      </h4>
+        <span class="finance-eyebrow">
+          READING THE DATA
+        </span>
 
-      <p>
-        The analysis compares S&P 500,
-        Gold, Bitcoin and Bonds across
-        nominal performance, real performance,
-        volatility and drawdown.
-      </p>
+      </div>
 
-      <p>
-        Returns are calculated from historical
-        price data. Real returns incorporate
-        the inflation adjustment used in the
-        analysis.
-      </p>
+      <div class="finance-reading-content">
+
+        <h4>
+          From historical data to visual insight.
+        </h4>
+
+        <p>
+          The analysis compares S&P 500,
+          Gold, Bitcoin and Bonds across
+          nominal performance, real performance,
+          volatility and maximum drawdown.
+        </p>
+
+        <p>
+          Returns are calculated from historical
+          price data. Real returns incorporate
+          the inflation adjustment used in the
+          original analysis.
+        </p>
+
+      </div>
 
     </div>
 
   `;
 
-
   modalContainer.appendChild(
     financeContainer
   );
 
-
   return financeContainer;
 }
 
+
+/* =====================================================
+   MOSTRAR / OCULTAR FINANCE
+===================================================== */
+
+function setFinanceVisibility(isVisible) {
+
+  const financeContainer =
+    document.querySelector(".finance-analysis");
+
+  if (!financeContainer) {
+    return;
+  }
+
+  if (isVisible) {
+
+    financeContainer.classList.add(
+      "finance-visible"
+    );
+
+  } else {
+
+    financeContainer.classList.remove(
+      "finance-visible"
+    );
+
+  }
+
+}
 
 
 /* =====================================================
@@ -738,11 +736,9 @@ async function renderFinanceSummary() {
       "financeSummaryBody"
     );
 
-
   if (!body) {
     return;
   }
-
 
   try {
 
@@ -751,9 +747,7 @@ async function renderFinanceSummary() {
         "finance_summary.json"
       );
 
-
     body.innerHTML = "";
-
 
     Object.entries(summary)
       .forEach(([asset, metrics]) => {
@@ -761,19 +755,22 @@ async function renderFinanceSummary() {
         const row =
           document.createElement("tr");
 
+        const assetColor =
+          financeAssetColors[asset] || "#777";
 
         row.innerHTML = `
 
           <td>
+
             <span
               class="finance-asset"
-              style="
-                --asset-color:
-                ${financeAssetColors[asset] || "#777"};
-              "
+              style="--asset-color: ${assetColor};"
             >
+
               ${asset}
+
             </span>
+
           </td>
 
           <td>
@@ -802,11 +799,9 @@ async function renderFinanceSummary() {
 
         `;
 
-
         body.appendChild(row);
 
       });
-
 
   } catch (error) {
 
@@ -814,7 +809,6 @@ async function renderFinanceSummary() {
       "Error cargando finance_summary.json:",
       error
     );
-
 
     body.innerHTML = `
 
@@ -836,7 +830,6 @@ async function renderFinanceSummary() {
 }
 
 
-
 /* =====================================================
    CREAR GRÁFICO
 ===================================================== */
@@ -850,35 +843,27 @@ async function createFinanceChart(
   const canvas =
     document.getElementById(canvasId);
 
-
   if (!canvas) {
     return;
   }
-
 
   try {
 
     const Chart =
       await loadChartJS();
 
-
     const rawData =
       await loadFinanceJSON(filename);
-
 
     const data =
       normalizeTimeSeries(rawData);
 
-
     const assets = [
-
       "S&P 500",
       "Gold",
       "Bitcoin",
       "Bonds"
-
     ];
-
 
     const labels =
       data.map(item => {
@@ -887,10 +872,8 @@ async function createFinanceChart(
           return "";
         }
 
-
         const date =
           new Date(item.date);
-
 
         return date.toLocaleDateString(
           "en-US",
@@ -901,7 +884,6 @@ async function createFinanceChart(
         );
 
       });
-
 
     const datasets =
       assets.map(asset => {
@@ -941,15 +923,11 @@ async function createFinanceChart(
 
       });
 
-
-    /* Destruir gráfico anterior */
-
     if (financeCharts[canvasId]) {
 
       financeCharts[canvasId].destroy();
 
     }
-
 
     financeCharts[canvasId] =
       new Chart(
@@ -959,11 +937,8 @@ async function createFinanceChart(
           type: chartType,
 
           data: {
-
             labels,
-
             datasets
-
           },
 
           options: {
@@ -973,11 +948,8 @@ async function createFinanceChart(
             maintainAspectRatio: false,
 
             interaction: {
-
               mode: "index",
-
               intersect: false
-
             },
 
             plugins: {
@@ -992,17 +964,15 @@ async function createFinanceChart(
 
                   usePointStyle: true,
 
-                  boxWidth: 7,
+                  pointStyle: "line",
 
-                  padding: 18,
+                  boxWidth: 20,
+
+                  padding: 20,
 
                   font: {
-
-                    family:
-                      "DM Sans",
-
+                    family: "DM Sans",
                     size: 10
-
                   }
 
                 }
@@ -1011,25 +981,16 @@ async function createFinanceChart(
 
               tooltip: {
 
-                backgroundColor:
-                  "#211f1d",
+                backgroundColor: "#211f1d",
 
                 titleFont: {
-
-                  family:
-                    "DM Sans",
-
+                  family: "DM Sans",
                   size: 11
-
                 },
 
                 bodyFont: {
-
-                  family:
-                    "DM Sans",
-
+                  family: "DM Sans",
                   size: 11
-
                 },
 
                 padding: 12,
@@ -1068,9 +1029,7 @@ async function createFinanceChart(
               x: {
 
                 grid: {
-
                   display: false
-
                 },
 
                 ticks: {
@@ -1080,20 +1039,14 @@ async function createFinanceChart(
                   color: "#888",
 
                   font: {
-
-                    family:
-                      "DM Sans",
-
+                    family: "DM Sans",
                     size: 9
-
                   }
 
                 },
 
                 border: {
-
                   display: false
-
                 }
 
               },
@@ -1101,10 +1054,7 @@ async function createFinanceChart(
               y: {
 
                 grid: {
-
-                  color:
-                    "rgba(0,0,0,.06)"
-
+                  color: "rgba(0,0,0,.06)"
                 },
 
                 ticks: {
@@ -1112,12 +1062,8 @@ async function createFinanceChart(
                   color: "#888",
 
                   font: {
-
-                    family:
-                      "DM Sans",
-
+                    family: "DM Sans",
                     size: 9
-
                   },
 
                   callback: function(value) {
@@ -1135,9 +1081,7 @@ async function createFinanceChart(
                 },
 
                 border: {
-
                   display: false
-
                 }
 
               }
@@ -1150,7 +1094,6 @@ async function createFinanceChart(
 
       );
 
-
   } catch (error) {
 
     console.error(
@@ -1158,12 +1101,10 @@ async function createFinanceChart(
       error
     );
 
-
     const parent =
       canvas.closest(
         ".finance-chart"
       );
-
 
     if (parent) {
 
@@ -1185,7 +1126,6 @@ async function createFinanceChart(
 }
 
 
-
 /* =====================================================
    CARGAR TODOS LOS GRÁFICOS
 ===================================================== */
@@ -1194,18 +1134,15 @@ async function renderFinanceCharts() {
 
   await loadChartJS();
 
-
   await createFinanceChart(
     "growthChart",
     "growth_data.json"
   );
 
-
   await createFinanceChart(
     "realGrowthChart",
     "real_growth_data.json"
   );
-
 
   await createFinanceChart(
     "drawdownChart",
@@ -1213,7 +1150,6 @@ async function renderFinanceCharts() {
   );
 
 }
-
 
 
 /* =====================================================
@@ -1227,22 +1163,15 @@ projects.forEach(project => {
       ".project-link"
     );
 
-
   if (!link) {
     return;
   }
-
 
   link.addEventListener(
     "click",
     async event => {
 
       event.preventDefault();
-
-
-      /* -----------------------------------------------
-         Obtener información
-      ------------------------------------------------ */
 
       const title =
         project.dataset.title;
@@ -1275,77 +1204,51 @@ projects.forEach(project => {
         project.dataset.url;
 
 
+      /* -----------------------------------------------
+         OCULTAR FINANCE ANTES DE CAMBIAR DE PROYECTO
+      ------------------------------------------------ */
+
+      setFinanceVisibility(false);
+
 
       /* -----------------------------------------------
-         Insertar información
+         INFORMACIÓN DEL PROYECTO
       ------------------------------------------------ */
 
       if (modalTitle) {
-
-        modalTitle.textContent =
-          title;
-
+        modalTitle.textContent = title;
       }
-
 
       if (modalCategory) {
-
-        modalCategory.textContent =
-          category;
-
+        modalCategory.textContent = category;
       }
-
 
       if (modalYear) {
-
-        modalYear.textContent =
-          year;
-
+        modalYear.textContent = year;
       }
-
 
       if (modalDetailYear) {
-
-        modalDetailYear.textContent =
-          year;
-
+        modalDetailYear.textContent = year;
       }
-
 
       if (modalDescription) {
-
-        modalDescription.textContent =
-          description;
-
+        modalDescription.textContent = description;
       }
-
 
       if (modalClient) {
-
-        modalClient.textContent =
-          client;
-
+        modalClient.textContent = client;
       }
-
 
       if (modalServices) {
-
-        modalServices.textContent =
-          services;
-
+        modalServices.textContent = services;
       }
-
 
       if (modalImage) {
 
-        modalImage.src =
-          image;
-
-        modalImage.alt =
-          title;
+        modalImage.src = image;
+        modalImage.alt = title;
 
       }
-
 
       if (
         modalGalleryOne &&
@@ -1357,7 +1260,6 @@ projects.forEach(project => {
 
       }
 
-
       if (
         modalGalleryTwo &&
         galleryTwo
@@ -1368,7 +1270,6 @@ projects.forEach(project => {
 
       }
 
-
       if (modalProjectLink) {
 
         modalProjectLink.href =
@@ -1377,28 +1278,37 @@ projects.forEach(project => {
       }
 
 
+      /* -----------------------------------------------
+         ABRIR MODAL
+      ------------------------------------------------ */
+
+      if (projectModal) {
+
+        projectModal.classList.add(
+          "open"
+        );
+
+      }
+
+      document.body.style.overflow =
+        "hidden";
+
 
       /* -----------------------------------------------
-         Financial Data Analysis
+         FINANCIAL DATA ANALYSIS
       ------------------------------------------------ */
 
       const isFinanceProject =
-        title ===
-        "Financial Data Analysis";
-
+        title === "Financial Data Analysis";
 
       if (isFinanceProject) {
 
         const financeContainer =
           createFinanceAnalysis();
 
-
         if (financeContainer) {
 
-          /*
-             Esperamos a que el modal esté visible
-             antes de crear los canvas.
-          */
+          setFinanceVisibility(true);
 
           requestAnimationFrame(() => {
 
@@ -1412,29 +1322,10 @@ projects.forEach(project => {
 
       }
 
-
-      /* -----------------------------------------------
-         Abrir modal
-      ------------------------------------------------ */
-
-      if (projectModal) {
-
-        projectModal.classList.add(
-          "open"
-        );
-
-      }
-
-
-      document.body.style.overflow =
-        "hidden";
-
     }
-
   );
 
 });
-
 
 
 /* =====================================================
@@ -1451,9 +1342,7 @@ function closeProjectModal() {
 
   }
 
-
-  document.body.style.overflow =
-    "";
+  document.body.style.overflow = "";
 
 }
 
@@ -1478,7 +1367,6 @@ if (modalOverlay) {
 }
 
 
-
 /* =====================================================
    ESC
 ===================================================== */
@@ -1490,9 +1378,7 @@ document.addEventListener(
     if (
       event.key === "Escape" &&
       projectModal &&
-      projectModal.classList.contains(
-        "open"
-      )
+      projectModal.classList.contains("open")
     ) {
 
       closeProjectModal();
@@ -1503,16 +1389,12 @@ document.addEventListener(
 );
 
 
-
 /* =====================================================
    HEADER SCROLL
 ===================================================== */
 
 const header =
-  document.querySelector(
-    ".header"
-  );
-
+  document.querySelector(".header");
 
 if (header) {
 
