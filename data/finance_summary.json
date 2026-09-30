@@ -1,0 +1,26 @@
+{
+  "S&P 500":{
+    "Nominal Return":243.13,
+    "Real Return":147.06,
+    "Volatility":14.97,
+    "Max Drawdown":-24.77
+  },
+  "Gold":{
+    "Nominal Return":239.55,
+    "Real Return":144.48,
+    "Volatility":13.67,
+    "Max Drawdown":-17.08
+  },
+  "Bitcoin":{
+    "Nominal Return":40140.6,
+    "Real Return":28873.81,
+    "Volatility":72.02,
+    "Max Drawdown":-75.57
+  },
+  "Bonds":{
+    "Nominal Return":-15.31,
+    "Real Return":-39.02,
+    "Volatility":13.42,
+    "Max Drawdown":-47.61
+  }
+}
