@@ -199,7 +199,7 @@ if (backToTop) {
 
 
 /* =====================================================
-   PROJECT MODAL
+   PROJECT MODAL + IMAGE SLIDER
 ===================================================== */
 
 const projectModal =
@@ -246,6 +246,660 @@ const modalProjectLink =
 
 
 /* =====================================================
+   SLIDER ELEMENTS
+===================================================== */
+
+const modalSliderPrev =
+  document.getElementById("modalSliderPrev");
+
+const modalSliderNext =
+  document.getElementById("modalSliderNext");
+
+const modalSliderDots =
+  document.getElementById("modalSliderDots");
+
+
+/* =====================================================
+   SLIDER VARIABLES
+===================================================== */
+
+let modalImages = [];
+
+let currentModalImage = 0;
+
+let modalSliderInterval = null;
+
+
+/* =====================================================
+   MOSTRAR IMAGEN
+===================================================== */
+
+function showModalImage(index) {
+
+  if (!modalImages.length) {
+    return;
+  }
+
+  if (index < 0) {
+    index = modalImages.length - 1;
+  }
+
+  if (index >= modalImages.length) {
+    index = 0;
+  }
+
+  currentModalImage = index;
+
+  modalImage.style.opacity = "0";
+
+  setTimeout(() => {
+
+    modalImage.src =
+      modalImages[currentModalImage];
+
+    modalImage.style.opacity = "1";
+
+  }, 150);
+
+  updateModalDots();
+
+}
+
+
+/* =====================================================
+   PUNTOS DEL SLIDER
+===================================================== */
+
+function createModalDots() {
+
+  if (!modalSliderDots) {
+    return;
+  }
+
+  modalSliderDots.innerHTML = "";
+
+  modalImages.forEach((image, index) => {
+
+    const dot =
+      document.createElement("button");
+
+    dot.type = "button";
+
+    dot.className =
+      "modal-slider-dot";
+
+    dot.setAttribute(
+      "aria-label",
+      `Ver imagen ${index + 1}`
+    );
+
+    dot.addEventListener(
+      "click",
+      () => {
+
+        showModalImage(index);
+
+        restartModalSlider();
+
+      }
+    );
+
+    modalSliderDots.appendChild(dot);
+
+  });
+
+  updateModalDots();
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR PUNTOS
+===================================================== */
+
+function updateModalDots() {
+
+  if (!modalSliderDots) {
+    return;
+  }
+
+  const dots =
+    modalSliderDots.querySelectorAll(
+      ".modal-slider-dot"
+    );
+
+  dots.forEach((dot, index) => {
+
+    dot.classList.toggle(
+      "active",
+      index === currentModalImage
+    );
+
+  });
+
+}
+
+
+/* =====================================================
+   SIGUIENTE
+===================================================== */
+
+function nextModalImage() {
+
+  if (modalImages.length <= 1) {
+    return;
+  }
+
+  showModalImage(
+    currentModalImage + 1
+  );
+
+}
+
+
+/* =====================================================
+   ANTERIOR
+===================================================== */
+
+function previousModalImage() {
+
+  if (modalImages.length <= 1) {
+    return;
+  }
+
+  showModalImage(
+    currentModalImage - 1
+  );
+
+}
+
+
+/* =====================================================
+   AUTOPLAY
+===================================================== */
+
+function startModalSlider() {
+
+  stopModalSlider();
+
+  if (modalImages.length <= 1) {
+    return;
+  }
+
+  modalSliderInterval =
+    setInterval(() => {
+
+      nextModalImage();
+
+    }, 8000);
+
+}
+
+
+function stopModalSlider() {
+
+  if (modalSliderInterval) {
+
+    clearInterval(
+      modalSliderInterval
+    );
+
+    modalSliderInterval = null;
+
+  }
+
+}
+
+
+function restartModalSlider() {
+
+  startModalSlider();
+
+}
+
+
+/* =====================================================
+   BOTONES DEL SLIDER
+===================================================== */
+
+if (modalSliderNext) {
+
+  modalSliderNext.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      nextModalImage();
+
+      restartModalSlider();
+
+    }
+  );
+
+}
+
+
+if (modalSliderPrev) {
+
+  modalSliderPrev.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      previousModalImage();
+
+      restartModalSlider();
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   CLICK SOBRE LA IMAGEN
+===================================================== */
+
+if (modalImage) {
+
+  modalImage.addEventListener(
+    "click",
+    () => {
+
+      nextModalImage();
+
+      restartModalSlider();
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   ABRIR PROYECTO
+===================================================== */
+
+projects.forEach(project => {
+
+  const link =
+    project.querySelector(".project-link");
+
+  if (!link) {
+    return;
+  }
+
+  link.addEventListener(
+    "click",
+    async event => {
+
+      event.preventDefault();
+
+
+      /* ===============================================
+         DATOS DEL PROYECTO
+      =============================================== */
+
+      const title =
+        project.dataset.title;
+
+      const category =
+        project.dataset.type;
+
+      const year =
+        project.dataset.year;
+
+      const description =
+        project.dataset.description;
+
+      const client =
+        project.dataset.client;
+
+      const services =
+        project.dataset.services;
+
+      const image =
+        project.dataset.image;
+
+      const galleryOne =
+        project.dataset.gallery1;
+
+      const galleryTwo =
+        project.dataset.gallery2;
+
+      const galleryThree =
+        project.dataset.gallery3;
+
+      const url =
+        project.dataset.url;
+
+
+      /* ===============================================
+         OCULTAR FINANCIAL ANALYSIS
+      =============================================== */
+
+      setFinanceVisibility(false);
+
+
+      /* ===============================================
+         INFORMACIÓN
+      =============================================== */
+
+      if (modalTitle) {
+        modalTitle.textContent = title;
+      }
+
+      if (modalCategory) {
+        modalCategory.textContent = category;
+      }
+
+      if (modalYear) {
+        modalYear.textContent = year;
+      }
+
+      if (modalDetailYear) {
+        modalDetailYear.textContent = year;
+      }
+
+      if (modalDescription) {
+        modalDescription.textContent = description;
+      }
+
+      if (modalClient) {
+        modalClient.textContent = client;
+      }
+
+      if (modalServices) {
+        modalServices.textContent = services;
+      }
+
+
+      /* ===============================================
+         SLIDER
+         
+         data-image   = imagen 1
+         data-gallery1 = imagen 2
+
+      =============================================== */
+
+      modalImages = [];
+
+      if (image) {
+
+        modalImages.push(image);
+
+      }
+
+      if (
+        galleryOne &&
+        galleryOne !== image
+      ) {
+
+        modalImages.push(
+          galleryOne
+        );
+
+      }
+      if (!modalImages.length) {
+
+        modalImages = [
+          "images/proyecto.jpg"
+        ];
+
+      }
+
+      currentModalImage = 0;
+
+      if (modalImage) {
+
+        modalImage.alt = title;
+
+      }
+
+      createModalDots();
+
+      showModalImage(0);
+
+
+      /* ===============================================
+         GALERÍA INFERIOR
+         
+         IMPORTANTE:
+         gallery1 NO se coloca abajo.
+         
+         gallery2 = imagen inferior 1
+         gallery3 = imagen inferior 2
+      =============================================== */
+
+      if (modalGalleryOne) {
+
+        if (galleryTwo) {
+
+          modalGalleryOne.src =
+            galleryTwo;
+
+          modalGalleryOne.alt =
+            `${title} - imagen adicional`;
+
+          modalGalleryOne.style.display =
+            "block";
+
+        } else {
+
+          modalGalleryOne.src = "";
+
+          modalGalleryOne.style.display =
+            "none";
+
+        }
+
+      }
+
+
+      if (modalGalleryTwo) {
+
+        if (galleryThree) {
+
+          modalGalleryTwo.src =
+            galleryThree;
+
+          modalGalleryTwo.alt =
+            `${title} - detalle`;
+
+          modalGalleryTwo.style.display =
+            "block";
+
+        } else {
+
+          modalGalleryTwo.src = "";
+
+          modalGalleryTwo.style.display =
+            "none";
+
+        }
+
+      }
+
+
+      /* ===============================================
+         LINK
+      =============================================== */
+
+      if (modalProjectLink) {
+
+        if (url) {
+
+          modalProjectLink.href =
+            url;
+
+          modalProjectLink.style.display =
+            "flex";
+
+        } else {
+
+          modalProjectLink.style.display =
+            "none";
+
+        }
+
+      }
+
+
+      /* ===============================================
+         ABRIR MODAL
+      =============================================== */
+
+      if (projectModal) {
+
+        projectModal.classList.add(
+          "open"
+        );
+
+      }
+
+      document.body.style.overflow =
+        "hidden";
+
+
+      /* ===============================================
+         FINANCIAL DATA ANALYSIS
+      =============================================== */
+
+      const isFinanceProject =
+        title === "Financial Data Analysis";
+
+      if (isFinanceProject) {
+
+        const financeContainer =
+          createFinanceAnalysis();
+
+        if (financeContainer) {
+
+          setFinanceVisibility(true);
+
+          requestAnimationFrame(() => {
+
+            renderFinanceSummary();
+
+            renderFinanceCharts();
+
+          });
+
+        }
+
+      }
+
+
+      /* ===============================================
+         INICIAR SLIDER
+      =============================================== */
+
+      startModalSlider();
+
+    }
+  );
+
+});
+
+
+/* =====================================================
+   CERRAR MODAL
+===================================================== */
+
+function closeProjectModal() {
+
+  if (projectModal) {
+
+    projectModal.classList.remove(
+      "open"
+    );
+
+  }
+
+  document.body.style.overflow = "";
+
+  stopModalSlider();
+
+}
+
+
+/* =====================================================
+   BOTÓN CERRAR
+===================================================== */
+
+if (modalClose) {
+
+  modalClose.addEventListener(
+    "click",
+    closeProjectModal
+  );
+
+}
+
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+if (modalOverlay) {
+
+  modalOverlay.addEventListener(
+    "click",
+    closeProjectModal
+  );
+
+}
+
+
+/* =====================================================
+   TECLADO
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      !projectModal ||
+      !projectModal.classList.contains("open")
+    ) {
+
+      return;
+
+    }
+
+
+    if (event.key === "Escape") {
+
+      closeProjectModal();
+
+    }
+
+
+    if (event.key === "ArrowRight") {
+
+      nextModalImage();
+
+      restartModalSlider();
+
+    }
+
+
+    if (event.key === "ArrowLeft") {
+
+      previousModalImage();
+
+      restartModalSlider();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
    CHART.JS
 ===================================================== */
 
@@ -254,56 +908,76 @@ let chartJsPromise = null;
 function loadChartJS() {
 
   if (window.Chart) {
-    return Promise.resolve(window.Chart);
+
+    return Promise.resolve(
+      window.Chart
+    );
+
   }
 
   if (chartJsPromise) {
+
     return chartJsPromise;
+
   }
 
-  chartJsPromise = new Promise((resolve, reject) => {
+  chartJsPromise = new Promise(
+    (resolve, reject) => {
 
-    const existingScript =
-      document.querySelector(
-        'script[src*="chart.js"]'
+      const existingScript =
+        document.querySelector(
+          'script[src*="chart.js"]'
+        );
+
+      if (existingScript) {
+
+        existingScript.addEventListener(
+          "load",
+          () => resolve(window.Chart)
+        );
+
+        existingScript.addEventListener(
+          "error",
+          reject
+        );
+
+        return;
+
+      }
+
+      const script =
+        document.createElement("script");
+
+      script.src =
+        "https://cdn.jsdelivr.net/npm/chart.js";
+
+      script.onload = () => {
+
+        resolve(
+          window.Chart
+        );
+
+      };
+
+      script.onerror = () => {
+
+        reject(
+          new Error(
+            "No se pudo cargar Chart.js"
+          )
+        );
+
+      };
+
+      document.head.appendChild(
+        script
       );
 
-    if (existingScript) {
-
-      existingScript.addEventListener(
-        "load",
-        () => resolve(window.Chart)
-      );
-
-      existingScript.addEventListener(
-        "error",
-        reject
-      );
-
-      return;
     }
-
-    const script =
-      document.createElement("script");
-
-    script.src =
-      "https://cdn.jsdelivr.net/npm/chart.js";
-
-    script.onload = () => {
-      resolve(window.Chart);
-    };
-
-    script.onerror = () => {
-      reject(
-        new Error("No se pudo cargar Chart.js")
-      );
-    };
-
-    document.head.appendChild(script);
-
-  });
+  );
 
   return chartJsPromise;
+
 }
 
 
@@ -312,6 +986,7 @@ function loadChartJS() {
 ===================================================== */
 
 const financeCharts = {};
+
 const financeDataCache = {};
 
 
@@ -319,14 +994,20 @@ const financeDataCache = {};
    CARGAR JSON
 ===================================================== */
 
-async function loadFinanceJSON(filename) {
+async function loadFinanceJSON(
+  filename
+) {
 
   if (financeDataCache[filename]) {
+
     return financeDataCache[filename];
+
   }
 
   const response =
-    await fetch(`data/${filename}`);
+    await fetch(
+      `data/${filename}`
+    );
 
   if (!response.ok) {
 
@@ -339,9 +1020,11 @@ async function loadFinanceJSON(filename) {
   const data =
     await response.json();
 
-  financeDataCache[filename] = data;
+  financeDataCache[filename] =
+    data;
 
   return data;
+
 }
 
 
@@ -349,10 +1032,14 @@ async function loadFinanceJSON(filename) {
    NORMALIZAR JSON
 ===================================================== */
 
-function normalizeTimeSeries(data) {
+function normalizeTimeSeries(
+  data
+) {
 
   if (Array.isArray(data)) {
+
     return data;
+
   }
 
   return Object.entries(data)
@@ -377,7 +1064,7 @@ function normalizeTimeSeries(data) {
 
 
 /* =====================================================
-   COLORES
+   COLORES FINANCIAL
 ===================================================== */
 
 const financeAssetColors = {
@@ -402,7 +1089,9 @@ function formatPercent(value) {
   if (
     value === null ||
     value === undefined ||
-    Number.isNaN(Number(value))
+    Number.isNaN(
+      Number(value)
+    )
   ) {
 
     return "—";
@@ -410,10 +1099,13 @@ function formatPercent(value) {
   }
 
   return (
-    Number(value).toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }) +
+    Number(value).toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    ) +
     "%"
   );
 
@@ -427,28 +1119,36 @@ function formatPercent(value) {
 function createFinanceAnalysis() {
 
   let financeContainer =
-    document.querySelector(".finance-analysis");
+    document.querySelector(
+      ".finance-analysis"
+    );
 
   if (financeContainer) {
+
     return financeContainer;
+
   }
 
   const modalContainer =
-    document.querySelector(".modal-container");
+    document.querySelector(
+      ".modal-container"
+    );
 
   if (!modalContainer) {
+
     return null;
+
   }
 
   financeContainer =
-    document.createElement("section");
+    document.createElement(
+      "section"
+    );
 
   financeContainer.className =
     "finance-analysis";
 
   financeContainer.innerHTML = `
-
-    <!-- INTRO -->
 
     <div class="finance-intro">
 
@@ -478,8 +1178,6 @@ function createFinanceAnalysis() {
 
     </div>
 
-
-    <!-- PERFORMANCE -->
 
     <div class="finance-summary">
 
@@ -535,8 +1233,6 @@ function createFinanceAnalysis() {
     </div>
 
 
-    <!-- GROWTH -->
-
     <div class="finance-chart-section">
 
       <div class="finance-chart-heading">
@@ -572,8 +1268,6 @@ function createFinanceAnalysis() {
 
     </div>
 
-
-    <!-- REAL GROWTH -->
 
     <div class="finance-chart-section">
 
@@ -611,8 +1305,6 @@ function createFinanceAnalysis() {
     </div>
 
 
-    <!-- DRAWDOWN -->
-
     <div class="finance-chart-section">
 
       <div class="finance-chart-heading">
@@ -648,8 +1340,6 @@ function createFinanceAnalysis() {
 
     </div>
 
-
-    <!-- READING -->
 
     <div class="finance-reading">
 
@@ -692,6 +1382,7 @@ function createFinanceAnalysis() {
   );
 
   return financeContainer;
+
 }
 
 
@@ -699,13 +1390,19 @@ function createFinanceAnalysis() {
    MOSTRAR / OCULTAR FINANCE
 ===================================================== */
 
-function setFinanceVisibility(isVisible) {
+function setFinanceVisibility(
+  isVisible
+) {
 
   const financeContainer =
-    document.querySelector(".finance-analysis");
+    document.querySelector(
+      ".finance-analysis"
+    );
 
   if (!financeContainer) {
+
     return;
+
   }
 
   if (isVisible) {
@@ -737,7 +1434,9 @@ async function renderFinanceSummary() {
     );
 
   if (!body) {
+
     return;
+
   }
 
   try {
@@ -750,58 +1449,65 @@ async function renderFinanceSummary() {
     body.innerHTML = "";
 
     Object.entries(summary)
-      .forEach(([asset, metrics]) => {
+      .forEach(
+        ([asset, metrics]) => {
 
-        const row =
-          document.createElement("tr");
+          const row =
+            document.createElement(
+              "tr"
+            );
 
-        const assetColor =
-          financeAssetColors[asset] || "#777";
+          const assetColor =
+            financeAssetColors[asset] ||
+            "#777";
 
-        row.innerHTML = `
+          row.innerHTML = `
 
-          <td>
+            <td>
 
-            <span
-              class="finance-asset"
-              style="--asset-color: ${assetColor};"
-            >
+              <span
+                class="finance-asset"
+                style="--asset-color: ${assetColor};"
+              >
 
-              ${asset}
+                ${asset}
 
-            </span>
+              </span>
 
-          </td>
+            </td>
 
-          <td>
-            ${formatPercent(
-              metrics["Nominal Return"]
-            )}
-          </td>
+            <td>
+              ${formatPercent(
+                metrics["Nominal Return"]
+              )}
+            </td>
 
-          <td>
-            ${formatPercent(
-              metrics["Real Return"]
-            )}
-          </td>
+            <td>
+              ${formatPercent(
+                metrics["Real Return"]
+              )}
+            </td>
 
-          <td>
-            ${formatPercent(
-              metrics["Volatility"]
-            )}
-          </td>
+            <td>
+              ${formatPercent(
+                metrics["Volatility"]
+              )}
+            </td>
 
-          <td>
-            ${formatPercent(
-              metrics["Max Drawdown"]
-            )}
-          </td>
+            <td>
+              ${formatPercent(
+                metrics["Max Drawdown"]
+              )}
+            </td>
 
-        `;
+          `;
 
-        body.appendChild(row);
+          body.appendChild(
+            row
+          );
 
-      });
+        }
+      );
 
   } catch (error) {
 
@@ -841,10 +1547,14 @@ async function createFinanceChart(
 ) {
 
   const canvas =
-    document.getElementById(canvasId);
+    document.getElementById(
+      canvasId
+    );
 
   if (!canvas) {
+
     return;
+
   }
 
   try {
@@ -853,27 +1563,40 @@ async function createFinanceChart(
       await loadChartJS();
 
     const rawData =
-      await loadFinanceJSON(filename);
+      await loadFinanceJSON(
+        filename
+      );
 
     const data =
-      normalizeTimeSeries(rawData);
+      normalizeTimeSeries(
+        rawData
+      );
 
     const assets = [
+
       "S&P 500",
+
       "Gold",
+
       "Bitcoin",
+
       "Bonds"
+
     ];
 
     const labels =
       data.map(item => {
 
         if (!item.date) {
+
           return "";
+
         }
 
         const date =
-          new Date(item.date);
+          new Date(
+            item.date
+          );
 
         return date.toLocaleDateString(
           "en-US",
@@ -892,16 +1615,17 @@ async function createFinanceChart(
 
           label: asset,
 
-          data: data.map(item => {
+          data:
+            data.map(item => {
 
-            const value =
-              item[asset];
+              const value =
+                item[asset];
 
-            return value !== undefined
-              ? Number(value)
-              : null;
+              return value !== undefined
+                ? Number(value)
+                : null;
 
-          }),
+            }),
 
           borderColor:
             financeAssetColors[asset],
@@ -923,11 +1647,13 @@ async function createFinanceChart(
 
       });
 
+
     if (financeCharts[canvasId]) {
 
       financeCharts[canvasId].destroy();
 
     }
+
 
     financeCharts[canvasId] =
       new Chart(
@@ -937,8 +1663,11 @@ async function createFinanceChart(
           type: chartType,
 
           data: {
+
             labels,
+
             datasets
+
           },
 
           options: {
@@ -948,8 +1677,11 @@ async function createFinanceChart(
             maintainAspectRatio: false,
 
             interaction: {
+
               mode: "index",
+
               intersect: false
+
             },
 
             plugins: {
@@ -971,8 +1703,11 @@ async function createFinanceChart(
                   padding: 20,
 
                   font: {
+
                     family: "DM Sans",
+
                     size: 10
+
                   }
 
                 }
@@ -981,16 +1716,23 @@ async function createFinanceChart(
 
               tooltip: {
 
-                backgroundColor: "#211f1d",
+                backgroundColor:
+                  "#211f1d",
 
                 titleFont: {
+
                   family: "DM Sans",
+
                   size: 11
+
                 },
 
                 bodyFont: {
+
                   family: "DM Sans",
+
                   size: 11
+
                 },
 
                 padding: 12,
@@ -999,24 +1741,31 @@ async function createFinanceChart(
 
                 callbacks: {
 
-                  label: function(context) {
+                  label:
+                    function(context) {
 
-                    const value =
-                      context.parsed.y;
+                      const value =
+                        context.parsed.y;
 
-                    return (
-                      `${context.dataset.label}: ` +
-                      Number(value)
-                        .toLocaleString(
-                          "en-US",
-                          {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                          }
-                        )
-                    );
+                      return (
 
-                  }
+                        `${context.dataset.label}: ` +
+
+                        Number(value)
+                          .toLocaleString(
+                            "en-US",
+                            {
+
+                              minimumFractionDigits: 2,
+
+                              maximumFractionDigits: 2
+
+                            }
+                          )
+
+                      );
+
+                    }
 
                 }
 
@@ -1029,7 +1778,9 @@ async function createFinanceChart(
               x: {
 
                 grid: {
+
                   display: false
+
                 },
 
                 ticks: {
@@ -1039,14 +1790,19 @@ async function createFinanceChart(
                   color: "#888",
 
                   font: {
+
                     family: "DM Sans",
+
                     size: 9
+
                   }
 
                 },
 
                 border: {
+
                   display: false
+
                 }
 
               },
@@ -1054,7 +1810,10 @@ async function createFinanceChart(
               y: {
 
                 grid: {
-                  color: "rgba(0,0,0,.06)"
+
+                  color:
+                    "rgba(0,0,0,.06)"
+
                 },
 
                 ticks: {
@@ -1062,26 +1821,34 @@ async function createFinanceChart(
                   color: "#888",
 
                   font: {
+
                     family: "DM Sans",
+
                     size: 9
+
                   },
 
-                  callback: function(value) {
+                  callback:
+                    function(value) {
 
-                    return Number(value)
-                      .toLocaleString(
-                        "en-US",
-                        {
-                          maximumFractionDigits: 0
-                        }
-                      );
+                      return Number(value)
+                        .toLocaleString(
+                          "en-US",
+                          {
 
-                  }
+                            maximumFractionDigits: 0
+
+                          }
+                        );
+
+                    }
 
                 },
 
                 border: {
+
                   display: false
+
                 }
 
               }
@@ -1150,243 +1917,6 @@ async function renderFinanceCharts() {
   );
 
 }
-
-
-/* =====================================================
-   ABRIR PROYECTOS
-===================================================== */
-
-projects.forEach(project => {
-
-  const link =
-    project.querySelector(
-      ".project-link"
-    );
-
-  if (!link) {
-    return;
-  }
-
-  link.addEventListener(
-    "click",
-    async event => {
-
-      event.preventDefault();
-
-      const title =
-        project.dataset.title;
-
-      const category =
-        project.dataset.type;
-
-      const year =
-        project.dataset.year;
-
-      const description =
-        project.dataset.description;
-
-      const client =
-        project.dataset.client;
-
-      const services =
-        project.dataset.services;
-
-      const image =
-        project.dataset.image;
-
-      const galleryOne =
-        project.dataset.gallery1;
-
-      const galleryTwo =
-        project.dataset.gallery2;
-
-      const url =
-        project.dataset.url;
-
-
-      /* -----------------------------------------------
-         OCULTAR FINANCE ANTES DE CAMBIAR DE PROYECTO
-      ------------------------------------------------ */
-
-      setFinanceVisibility(false);
-
-
-      /* -----------------------------------------------
-         INFORMACIÓN DEL PROYECTO
-      ------------------------------------------------ */
-
-      if (modalTitle) {
-        modalTitle.textContent = title;
-      }
-
-      if (modalCategory) {
-        modalCategory.textContent = category;
-      }
-
-      if (modalYear) {
-        modalYear.textContent = year;
-      }
-
-      if (modalDetailYear) {
-        modalDetailYear.textContent = year;
-      }
-
-      if (modalDescription) {
-        modalDescription.textContent = description;
-      }
-
-      if (modalClient) {
-        modalClient.textContent = client;
-      }
-
-      if (modalServices) {
-        modalServices.textContent = services;
-      }
-
-      if (modalImage) {
-
-        modalImage.src = image;
-        modalImage.alt = title;
-
-      }
-
-      if (
-        modalGalleryOne &&
-        galleryOne
-      ) {
-
-        modalGalleryOne.src =
-          galleryOne;
-
-      }
-
-      if (
-        modalGalleryTwo &&
-        galleryTwo
-      ) {
-
-        modalGalleryTwo.src =
-          galleryTwo;
-
-      }
-
-      if (modalProjectLink) {
-
-        modalProjectLink.href =
-          url || "#";
-
-      }
-
-
-      /* -----------------------------------------------
-         ABRIR MODAL
-      ------------------------------------------------ */
-
-      if (projectModal) {
-
-        projectModal.classList.add(
-          "open"
-        );
-
-      }
-
-      document.body.style.overflow =
-        "hidden";
-
-
-      /* -----------------------------------------------
-         FINANCIAL DATA ANALYSIS
-      ------------------------------------------------ */
-
-      const isFinanceProject =
-        title === "Financial Data Analysis";
-
-      if (isFinanceProject) {
-
-        const financeContainer =
-          createFinanceAnalysis();
-
-        if (financeContainer) {
-
-          setFinanceVisibility(true);
-
-          requestAnimationFrame(() => {
-
-            renderFinanceSummary();
-
-            renderFinanceCharts();
-
-          });
-
-        }
-
-      }
-
-    }
-  );
-
-});
-
-
-/* =====================================================
-   CERRAR MODAL
-===================================================== */
-
-function closeProjectModal() {
-
-  if (projectModal) {
-
-    projectModal.classList.remove(
-      "open"
-    );
-
-  }
-
-  document.body.style.overflow = "";
-
-}
-
-
-if (modalClose) {
-
-  modalClose.addEventListener(
-    "click",
-    closeProjectModal
-  );
-
-}
-
-
-if (modalOverlay) {
-
-  modalOverlay.addEventListener(
-    "click",
-    closeProjectModal
-  );
-
-}
-
-
-/* =====================================================
-   ESC
-===================================================== */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key === "Escape" &&
-      projectModal &&
-      projectModal.classList.contains("open")
-    ) {
-
-      closeProjectModal();
-
-    }
-
-  }
-);
 
 
 /* =====================================================
