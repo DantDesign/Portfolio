@@ -15,6 +15,9 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+
+<script src="https://jsdelivr.net"></script>
+
 </head>
 
 
@@ -359,8 +362,6 @@
   data-client="Heritage Snacks"
   data-services="Packaging Design, Labeling, Brand Illustration, Mockup Production"
   data-image="images/pack_mockup.png"
-  data-gallery1=""
-  data-gallery2=""
   data-url="#">
 
           <a
@@ -517,7 +518,7 @@
   data-services="Social Media Layout, Typography Systems, Content Strategy"
   data-image="images/carrussel_redes.png"
   data-gallery1="images/carrusel_instagram.png"
-  data-gallery2=""
+
   data-url="https://www.instagram.com/danvisualdesign/p/DV2Cx-nEeOz/">
 
           <a
@@ -593,10 +594,6 @@
   data-services="Landing Page, Web Development, Responsive Design, Photo Retouching"
 
   data-image="images/web_mockup.png"
-
-  data-gallery1=""
-  data-gallery2=""
-
   data-url="https://robertoblues.vercel.app/">
 
 
@@ -663,22 +660,15 @@
   class="project-card"
   data-category="digital"
 
-  data-title="Financial Analytics Dashboard"
-  data-type="DATA ANALYTICS / DASHBOARD DESIGN"
+  data-is-saas="true"
+  data-title="SaaS Growth & Retention Analytics"
+  data-type="Data Analytics / Python & JS"
   data-year="2026"
-
-  data-description="A financial analysis developed to transform historical data from various asset classes into metrics, visualizations, and an interactive exploration experience."
-
-  data-client="Personal Project"
-  data-services="Python / Data Analysis / JavaScript / Data Visualization"
-
-  data-image="images/financial_data.png"
-
-  data-gallery1=""
-  data-gallery2=""
-
-  data-url="https://colab.research.google.com/drive/1G773fglPIEjPNFtmuc-r-P4hu5rj12zW?usp=sharing">
-
+  data-description="Developed a 36-month statistical model for a B2B SaaS business, uncovering that Business and Enterprise tiers generate 70%+ of MRR with an NRR >112%, while pinpointing a 5.6% monthly churn in the Starter plan that requires targeted onboarding improvements."
+  data-client="B2B SaaS Simulation"
+  data-services="Python (Pandas/NumPy), Google Colab, Chart.js, Data Storytelling"
+  data-image="images/tu_portada_saas.png"
+  data-url="https://colab.research.google.com/drive/1QYERe4eaqU5Lss-1F7lA2ek0EtasljtB?usp=sharing">
 
           <a
             href="#"
@@ -687,7 +677,7 @@
             <div class="project-media">
 
               <img
-                src="images/financial_data.png"
+                src="images/dashboard.png"
                 alt="Dashboard"
                 loading="lazy">
 
@@ -1076,6 +1066,45 @@
 </div>
 
 
+!-- CONTENEDOR INTERACTIVO SAAS (Se activa solo para el proyecto de Data Analytics) -->
+<div id="saasDashboardContainer" style="display: none; background: #10261e; border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.08); color: #f8fafc;">
+  
+  <!-- 01: TABLA -->
+  <div style="background: #0b1c16; border-radius: 10px; padding: 1.2rem; margin-bottom: 1.2rem; overflow-x: auto;">
+    <div style="font-size: 0.72rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.8rem; font-weight: 600;">01 — PERFORMANCE & UNIT ECONOMICS</div>
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+      <thead>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 0.75rem;">
+          <th style="padding-bottom: 0.6rem;">PLAN / TIER</th>
+          <th style="padding-bottom: 0.6rem;">CURRENT MRR</th>
+          <th style="padding-bottom: 0.6rem;">NET RETENTION (NRR)</th>
+          <th style="padding-bottom: 0.6rem;">MONTHLY CHURN</th>
+          <th style="padding-bottom: 0.6rem;">LTV / CAC</th>
+        </tr>
+      </thead>
+      <tbody id="saas-table-body"></tbody>
+    </table>
+  </div>
+
+  <!-- 02, 03, 04: GRÁFICOS -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+    <div style="background: #0b1c16; border-radius: 10px; padding: 1rem;">
+      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">02 — MRR GROWTH BY TIER ($)</div>
+      <div style="height: 200px;"><canvas id="chart-mrr"></canvas></div>
+    </div>
+    <div style="background: #0b1c16; border-radius: 10px; padding: 1rem;">
+      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">03 — COHORT RETENTION (24M)</div>
+      <div style="height: 200px;"><canvas id="chart-retention"></canvas></div>
+    </div>
+    <div style="background: #0b1c16; border-radius: 10px; padding: 1rem;">
+      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">04 — MONTHLY CHURN RATE (%)</div>
+      <div style="height: 200px;"><canvas id="chart-churn"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+
     <!-- PROJECT INFO -->
 
     <div class="modal-info">
@@ -1145,15 +1174,8 @@
 
     <div class="modal-gallery">
 
-      <img
-        src="images/project-01-detail-01.jpg"
-        alt=""
-        id="modalGalleryOne">
-
-      <img
-        src="images/project-01-detail-02.jpg"
-        alt=""
-        id="modalGalleryTwo">
+<img id="modalGalleryOne" src="" alt="" style="display: none;">
+<img id="modalGalleryTwo" src="" alt="" style="display: none;">
 
     </div>
 
@@ -1175,9 +1197,8 @@
 </div>
 
   <script src="script.js"></script>
-
+  <script src="script_data.js"></script>
 
 </body>
-
 
 </html>

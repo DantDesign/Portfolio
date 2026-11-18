@@ -198,705 +198,264 @@ if (backToTop) {
 }
 
 
-/* =====================================================
-   PROJECT MODAL + IMAGE SLIDER
-===================================================== */
+/* ======== PROJECT MODAL + IMAGE SLIDER ======== */
 
-const projectModal =
-  document.getElementById("projectModal");
+const projectModal = document.getElementById("projectModal");
+const modalOverlay = document.getElementById("modalOverlay");
+const modalClose = document.getElementById("modalClose");
+const modalTitle = document.getElementById("modalTitle");
+const modalCategory = document.getElementById("modalCategory");
+const modalYear = document.getElementById("modalYear");
+const modalImage = document.getElementById("modalImage");
+const modalDescription = document.getElementById("modalDescription");
+const modalClient = document.getElementById("modalClient");
+const modalServices = document.getElementById("modalServices");
+const modalDetailYear = document.getElementById("modalDetailYear");
+const modalGalleryOne = document.getElementById("modalGalleryOne");
+const modalGalleryTwo = document.getElementById("modalGalleryTwo");
+const modalProjectLink = document.getElementById("modalProjectLink");
 
-const modalOverlay =
-  document.getElementById("modalOverlay");
-
-const modalClose =
-  document.getElementById("modalClose");
-
-const modalTitle =
-  document.getElementById("modalTitle");
-
-const modalCategory =
-  document.getElementById("modalCategory");
-
-const modalYear =
-  document.getElementById("modalYear");
-
-const modalImage =
-  document.getElementById("modalImage");
-
-const modalDescription =
-  document.getElementById("modalDescription");
-
-const modalClient =
-  document.getElementById("modalClient");
-
-const modalServices =
-  document.getElementById("modalServices");
-
-const modalDetailYear =
-  document.getElementById("modalDetailYear");
-
-const modalGalleryOne =
-  document.getElementById("modalGalleryOne");
-
-const modalGalleryTwo =
-  document.getElementById("modalGalleryTwo");
-
-const modalProjectLink =
-  document.getElementById("modalProjectLink");
-
-
-/* =====================================================
-   SLIDER ELEMENTS
-===================================================== */
-
-const modalSliderPrev =
-  document.getElementById("modalSliderPrev");
-
-const modalSliderNext =
-  document.getElementById("modalSliderNext");
-
-const modalSliderDots =
-  document.getElementById("modalSliderDots");
-
-
-/* =====================================================
-   SLIDER VARIABLES
-===================================================== */
+const modalSliderPrev = document.getElementById("modalSliderPrev");
+const modalSliderNext = document.getElementById("modalSliderNext");
+const modalSliderDots = document.getElementById("modalSliderDots");
 
 let modalImages = [];
-
 let currentModalImage = 0;
-
 let modalSliderInterval = null;
+let modalFadeTimeout = null;
 
+function showModalImage(index, instant = false) {
+  if (!modalImages.length || !modalImage) return;
 
-/* =====================================================
-   MOSTRAR IMAGEN
-===================================================== */
-
-function showModalImage(index) {
-
-  if (!modalImages.length) {
-    return;
+  if (modalFadeTimeout) {
+    clearTimeout(modalFadeTimeout);
+    modalFadeTimeout = null;
   }
 
-  if (index < 0) {
-    index = modalImages.length - 1;
-  }
-
-  if (index >= modalImages.length) {
-    index = 0;
-  }
+  if (index < 0) index = modalImages.length - 1;
+  if (index >= modalImages.length) index = 0;
 
   currentModalImage = index;
 
-  modalImage.style.opacity = "0";
-
-  setTimeout(() => {
-
-    modalImage.src =
-      modalImages[currentModalImage];
-
+  if (instant || index === 0) {
+    modalImage.src = modalImages[currentModalImage];
     modalImage.style.opacity = "1";
-
-  }, 150);
+  } else {
+    modalImage.style.opacity = "0";
+    modalFadeTimeout = setTimeout(() => {
+      modalImage.src = modalImages[currentModalImage];
+      modalImage.style.opacity = "1";
+    }, 150);
+  }
 
   updateModalDots();
-
 }
-
-
-/* =====================================================
-   PUNTOS DEL SLIDER
-===================================================== */
 
 function createModalDots() {
+  const hasMultiple = modalImages.length > 1;
 
-  if (!modalSliderDots) {
+  if (modalSliderPrev) modalSliderPrev.style.display = hasMultiple ? "flex" : "none";
+  if (modalSliderNext) modalSliderNext.style.display = hasMultiple ? "flex" : "none";
+
+  if (!modalSliderDots) return;
+  modalSliderDots.innerHTML = "";
+
+  if (!hasMultiple) {
+    modalSliderDots.style.display = "none";
     return;
   }
 
-  modalSliderDots.innerHTML = "";
+  modalSliderDots.style.display = "flex";
 
-  modalImages.forEach((image, index) => {
-
-    const dot =
-      document.createElement("button");
-
+  modalImages.forEach((_, index) => {
+    const dot = document.createElement("button");
     dot.type = "button";
-
-    dot.className =
-      "modal-slider-dot";
-
-    dot.setAttribute(
-      "aria-label",
-      `Ver imagen ${index + 1}`
-    );
-
-    dot.addEventListener(
-      "click",
-      () => {
-
-        showModalImage(index);
-
-        restartModalSlider();
-
-      }
-    );
-
+    dot.className = "modal-slider-dot";
+    dot.setAttribute("aria-label", `Ver imagen ${index + 1}`);
+    dot.addEventListener("click", () => {
+      showModalImage(index);
+      restartModalSlider();
+    });
     modalSliderDots.appendChild(dot);
-
   });
 
   updateModalDots();
-
 }
-
-
-/* =====================================================
-   ACTUALIZAR PUNTOS
-===================================================== */
 
 function updateModalDots() {
-
-  if (!modalSliderDots) {
-    return;
-  }
-
-  const dots =
-    modalSliderDots.querySelectorAll(
-      ".modal-slider-dot"
-    );
-
+  if (!modalSliderDots) return;
+  const dots = modalSliderDots.querySelectorAll(".modal-slider-dot");
   dots.forEach((dot, index) => {
-
-    dot.classList.toggle(
-      "active",
-      index === currentModalImage
-    );
-
+    dot.classList.toggle("active", index === currentModalImage);
   });
-
 }
-
-
-/* =====================================================
-   SIGUIENTE
-===================================================== */
 
 function nextModalImage() {
-
-  if (modalImages.length <= 1) {
-    return;
-  }
-
-  showModalImage(
-    currentModalImage + 1
-  );
-
+  if (modalImages.length <= 1) return;
+  showModalImage(currentModalImage + 1);
 }
-
-
-/* =====================================================
-   ANTERIOR
-===================================================== */
 
 function previousModalImage() {
-
-  if (modalImages.length <= 1) {
-    return;
-  }
-
-  showModalImage(
-    currentModalImage - 1
-  );
-
+  if (modalImages.length <= 1) return;
+  showModalImage(currentModalImage - 1);
 }
-
-
-/* =====================================================
-   AUTOPLAY
-===================================================== */
 
 function startModalSlider() {
-
   stopModalSlider();
-
-  if (modalImages.length <= 1) {
-    return;
-  }
-
-  modalSliderInterval =
-    setInterval(() => {
-
-      nextModalImage();
-
-    }, 8000);
-
+  if (modalImages.length <= 1) return;
+  modalSliderInterval = setInterval(() => {
+    nextModalImage();
+  }, 8000);
 }
-
 
 function stopModalSlider() {
-
   if (modalSliderInterval) {
-
-    clearInterval(
-      modalSliderInterval
-    );
-
+    clearInterval(modalSliderInterval);
     modalSliderInterval = null;
-
   }
-
 }
-
 
 function restartModalSlider() {
-
   startModalSlider();
-
 }
-
-
-/* =====================================================
-   BOTONES DEL SLIDER
-===================================================== */
 
 if (modalSliderNext) {
-
-  modalSliderNext.addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      nextModalImage();
-
-      restartModalSlider();
-
-    }
-  );
-
+  modalSliderNext.addEventListener("click", event => {
+    event.stopPropagation();
+    nextModalImage();
+    restartModalSlider();
+  });
 }
-
 
 if (modalSliderPrev) {
-
-  modalSliderPrev.addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      previousModalImage();
-
-      restartModalSlider();
-
-    }
-  );
-
+  modalSliderPrev.addEventListener("click", event => {
+    event.stopPropagation();
+    previousModalImage();
+    restartModalSlider();
+  });
 }
-
-
-/* =====================================================
-   CLICK SOBRE LA IMAGEN
-===================================================== */
 
 if (modalImage) {
-
-  modalImage.addEventListener(
-    "click",
-    () => {
-
-      nextModalImage();
-
-      restartModalSlider();
-
-    }
-  );
-
+  modalImage.addEventListener("click", () => {
+    nextModalImage();
+    restartModalSlider();
+  });
 }
-
-
-/* =====================================================
-   ABRIR PROYECTO
-===================================================== */
 
 projects.forEach(project => {
+  const link = project.querySelector(".project-link");
+  if (!link) return;
 
-  const link =
-    project.querySelector(".project-link");
+  link.addEventListener("click", async event => {
+    event.preventDefault();
 
-  if (!link) {
-    return;
-  }
+    const title = project.dataset.title;
+    const category = project.dataset.type;
+    const year = project.dataset.year;
+    const description = project.dataset.description;
+    const client = project.dataset.client;
+    const services = project.dataset.services;
+    const image = project.dataset.image;
+    const galleryOne = project.dataset.gallery1;
+    const galleryTwo = project.dataset.gallery2;
+    const galleryThree = project.dataset.gallery3;
+    const url = project.dataset.url;
 
-  link.addEventListener(
-    "click",
-    async event => {
-
-      event.preventDefault();
-
-
-      /* ===============================================
-         DATOS DEL PROYECTO
-      =============================================== */
-
-      const title =
-        project.dataset.title;
-
-      const category =
-        project.dataset.type;
-
-      const year =
-        project.dataset.year;
-
-      const description =
-        project.dataset.description;
-
-      const client =
-        project.dataset.client;
-
-      const services =
-        project.dataset.services;
-
-      const image =
-        project.dataset.image;
-
-      const galleryOne =
-        project.dataset.gallery1;
-
-      const galleryTwo =
-        project.dataset.gallery2;
-
-      const galleryThree =
-        project.dataset.gallery3;
-
-      const url =
-        project.dataset.url;
-
-
-      /* ===============================================
-         OCULTAR FINANCIAL ANALYSIS
-      =============================================== */
-
+    if (typeof setFinanceVisibility === "function") {
       setFinanceVisibility(false);
-
-
-      /* ===============================================
-         INFORMACIÓN
-      =============================================== */
-
-      if (modalTitle) {
-        modalTitle.textContent = title;
-      }
-
-      if (modalCategory) {
-        modalCategory.textContent = category;
-      }
-
-      if (modalYear) {
-        modalYear.textContent = year;
-      }
-
-      if (modalDetailYear) {
-        modalDetailYear.textContent = year;
-      }
-
-      if (modalDescription) {
-        modalDescription.textContent = description;
-      }
-
-      if (modalClient) {
-        modalClient.textContent = client;
-      }
-
-      if (modalServices) {
-        modalServices.textContent = services;
-      }
-
-
-      /* ===============================================
-         SLIDER
-         
-         data-image   = imagen 1
-         data-gallery1 = imagen 2
-
-      =============================================== */
-
-      modalImages = [];
-
-      if (image) {
-
-        modalImages.push(image);
-
-      }
-
-      if (
-        galleryOne &&
-        galleryOne !== image
-      ) {
-
-        modalImages.push(
-          galleryOne
-        );
-
-      }
-      if (!modalImages.length) {
-
-        modalImages = [
-          "images/proyecto.jpg"
-        ];
-
-      }
-
-      currentModalImage = 0;
-
-      if (modalImage) {
-
-        modalImage.alt = title;
-
-      }
-
-      createModalDots();
-
-      showModalImage(0);
-
-
-      /* ===============================================
-         GALERÍA INFERIOR
-         
-         IMPORTANTE:
-         gallery1 NO se coloca abajo.
-         
-         gallery2 = imagen inferior 1
-         gallery3 = imagen inferior 2
-      =============================================== */
-
-      if (modalGalleryOne) {
-
-        if (galleryTwo) {
-
-          modalGalleryOne.src =
-            galleryTwo;
-
-          modalGalleryOne.alt =
-            `${title} - imagen adicional`;
-
-          modalGalleryOne.style.display =
-            "block";
-
-        } else {
-
-          modalGalleryOne.src = "";
-
-          modalGalleryOne.style.display =
-            "none";
-
-        }
-
-      }
-
-
-      if (modalGalleryTwo) {
-
-        if (galleryThree) {
-
-          modalGalleryTwo.src =
-            galleryThree;
-
-          modalGalleryTwo.alt =
-            `${title} - detalle`;
-
-          modalGalleryTwo.style.display =
-            "block";
-
-        } else {
-
-          modalGalleryTwo.src = "";
-
-          modalGalleryTwo.style.display =
-            "none";
-
-        }
-
-      }
-
-
-      /* ===============================================
-         LINK
-      =============================================== */
-
-      if (modalProjectLink) {
-
-        if (url) {
-
-          modalProjectLink.href =
-            url;
-
-          modalProjectLink.style.display =
-            "flex";
-
-        } else {
-
-          modalProjectLink.style.display =
-            "none";
-
-        }
-
-      }
-
-
-      /* ===============================================
-         ABRIR MODAL
-      =============================================== */
-
-      if (projectModal) {
-
-        projectModal.classList.add(
-          "open"
-        );
-
-      }
-
-      document.body.style.overflow =
-        "hidden";
-
-
-      /* ===============================================
-         FINANCIAL DATA ANALYSIS
-      =============================================== */
-
-      const isFinanceProject =
-        title === "Financial Data Analysis";
-
-      if (isFinanceProject) {
-
-        const financeContainer =
-          createFinanceAnalysis();
-
-        if (financeContainer) {
-
-          setFinanceVisibility(true);
-
-          requestAnimationFrame(() => {
-
-            renderFinanceSummary();
-
-            renderFinanceCharts();
-
-          });
-
-        }
-
-      }
-
-
-      /* ===============================================
-         INICIAR SLIDER
-      =============================================== */
-
-      startModalSlider();
-
     }
-  );
 
+    if (modalTitle) modalTitle.textContent = title;
+    if (modalCategory) modalCategory.textContent = category;
+    if (modalYear) modalYear.textContent = year;
+    if (modalDetailYear) modalDetailYear.textContent = year;
+    if (modalDescription) modalDescription.textContent = description;
+    if (modalClient) modalClient.textContent = client;
+    if (modalServices) modalServices.textContent = services;
+
+        modalImages = [];
+    if (image && image.trim() !== "") modalImages.push(image);
+    if (galleryOne && galleryOne.trim() !== "" && galleryOne !== image) modalImages.push(galleryOne);
+    if (galleryTwo && galleryTwo.trim() !== "" && galleryTwo !== image && galleryTwo !== galleryOne) modalImages.push(galleryTwo);
+    if (galleryThree && galleryThree.trim() !== "" && galleryThree !== image && galleryThree !== galleryOne && galleryThree !== galleryTwo) modalImages.push(galleryThree);
+
+
+
+    if (!modalImages.length) {
+      modalImages = ["images/proyecto.jpg"];
+    }
+
+    currentModalImage = 0;
+    if (modalImage) modalImage.alt = title;
+
+    createModalDots();
+    showModalImage(0, true);
+
+    if (modalGalleryOne) {
+      modalGalleryOne.src = "";
+      modalGalleryOne.style.display = "none";
+    }
+    if (modalGalleryTwo) {
+      modalGalleryTwo.src = "";
+      modalGalleryTwo.style.display = "none";
+    }
+
+    if (modalProjectLink) {
+      if (url && url.trim() !== "" && url.trim() !== "#") {
+        modalProjectLink.href = url;
+        modalProjectLink.style.display = "flex";
+      } else {
+        modalProjectLink.removeAttribute("href");
+        modalProjectLink.style.display = "none";
+      }
+    }
+
+    if (projectModal) projectModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+
+    if (title === "Financial Data Analysis" && typeof createFinanceAnalysis === "function") {
+      const financeContainer = createFinanceAnalysis();
+      if (financeContainer) {
+        setFinanceVisibility(true);
+        requestAnimationFrame(() => {
+          renderFinanceSummary();
+          renderFinanceCharts();
+        });
+      }
+    }
+
+    startModalSlider();
+  });
 });
 
-
-/* =====================================================
-   CERRAR MODAL
-===================================================== */
-
 function closeProjectModal() {
-
-  if (projectModal) {
-
-    projectModal.classList.remove(
-      "open"
-    );
-
-  }
-
+  if (projectModal) projectModal.classList.remove("open");
   document.body.style.overflow = "";
-
   stopModalSlider();
 
-}
-
-
-/* =====================================================
-   BOTÓN CERRAR
-===================================================== */
-
-if (modalClose) {
-
-  modalClose.addEventListener(
-    "click",
-    closeProjectModal
-  );
-
-}
-
-
-/* =====================================================
-   OVERLAY
-===================================================== */
-
-if (modalOverlay) {
-
-  modalOverlay.addEventListener(
-    "click",
-    closeProjectModal
-  );
-
-}
-
-
-/* =====================================================
-   TECLADO
-===================================================== */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      !projectModal ||
-      !projectModal.classList.contains("open")
-    ) {
-
-      return;
-
-    }
-
-
-    if (event.key === "Escape") {
-
-      closeProjectModal();
-
-    }
-
-
-    if (event.key === "ArrowRight") {
-
-      nextModalImage();
-
-      restartModalSlider();
-
-    }
-
-
-    if (event.key === "ArrowLeft") {
-
-      previousModalImage();
-
-      restartModalSlider();
-
-    }
-
+  if (modalFadeTimeout) {
+    clearTimeout(modalFadeTimeout);
+    modalFadeTimeout = null;
   }
-);
+  if (modalImage) modalImage.src = "";
+}
+
+if (modalClose) modalClose.addEventListener("click", closeProjectModal);
+if (modalOverlay) modalOverlay.addEventListener("click", closeProjectModal);
+
+document.addEventListener("keydown", event => {
+  if (!projectModal || !projectModal.classList.contains("open")) return;
+  if (event.key === "Escape") closeProjectModal();
+  if (event.key === "ArrowRight") {
+    nextModalImage();
+    restartModalSlider();
+  }
+  if (event.key === "ArrowLeft") {
+    previousModalImage();
+    restartModalSlider();
+  }
+});
+
 
 
 /* =====================================================
