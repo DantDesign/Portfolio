@@ -661,13 +661,13 @@
   data-category="digital"
 
   data-is-saas="true"
-  data-title="SaaS Growth & Retention Analytics"
-  data-type="Data Analytics / Python & JS"
+  data-title="Subscription Growth & Retention"
+  data-type="DATA ANALYTICS / PYTHON & JS"
   data-year="2026"
-  data-description="Developed a 36-month statistical model for a B2B SaaS business, uncovering that Business and Enterprise tiers generate 70%+ of MRR with an NRR >112%, while pinpointing a 5.6% monthly churn in the Starter plan that requires targeted onboarding improvements."
-  data-client="B2B SaaS Simulation"
+  data-description="A 36-month statistical simulation and interactive dashboard built to identify which pricing tiers drive real profit and where customers are dropping off. It helps leadership decide whether to focus budget on acquiring new users or improving product onboarding."
+  data-client="Tech Startup Simulation"
   data-services="Python (Pandas/NumPy), Google Colab, Chart.js, Data Storytelling"
-  data-image="images/financial_data.png"
+  data-image="images/dashboard.jpg"
 
   data-url="https://colab.research.google.com/drive/1QYERe4eaqU5Lss-1F7lA2ek0EtasljtB?usp=sharing">
 
@@ -678,7 +678,7 @@
             <div class="project-media">
 
               <img
-                src="images/financial_data.png"
+                src="images/dashboard.jpg"
                 alt="Dashboard"
                 loading="lazy">
 
@@ -711,7 +711,7 @@
               <div class="project-title">
 
                 <h3>
-                  Financial Analytics Dashboard
+                  Business Analytics Dashboard
                 </h3>
 
                 <span class="project-category">
@@ -1072,15 +1072,15 @@
   
   <!-- 01: TABLA -->
   <div style="background: #0b1c16; border-radius: 10px; padding: 1.2rem; margin-bottom: 1.2rem; overflow-x: auto;">
-    <div style="font-size: 0.72rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.8rem; font-weight: 600;">01 — PERFORMANCE & UNIT ECONOMICS</div>
+    <div style="font-size: 0.72rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.8rem; font-weight: 600;">01 — PROFITABILITY BY PLAN</div>
     <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
       <thead>
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 0.75rem;">
-          <th style="padding-bottom: 0.6rem;">PLAN / TIER</th>
-          <th style="padding-bottom: 0.6rem;">CURRENT MRR</th>
-          <th style="padding-bottom: 0.6rem;">NET RETENTION (NRR)</th>
-          <th style="padding-bottom: 0.6rem;">MONTHLY CHURN</th>
-          <th style="padding-bottom: 0.6rem;">LTV / CAC</th>
+          <th style="padding-bottom: 0.6rem;">PLAN</th>
+          <th style="padding-bottom: 0.6rem;">MONTHLY REVENUE</th>
+          <th style="padding-bottom: 0.6rem;">NET GROWTH</th>
+          <th style="padding-bottom: 0.6rem;">MONTHLY LOSS</th>
+          <th style="padding-bottom: 0.6rem;">VALUE / COST</th>
         </tr>
       </thead>
       <tbody id="saas-table-body"></tbody>
@@ -1090,15 +1090,15 @@
   <!-- 02, 03, 04: GRÁFICOS -->
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
     <div style="background: #0b1c16; border-radius: 10px; padding: 1rem;">
-      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">02 — MRR GROWTH BY TIER ($)</div>
+      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">02 — MONTHLY REVENUE BY PLAN ($)</div>
       <div style="height: 200px;"><canvas id="chart-mrr"></canvas></div>
     </div>
     <div style="background: #0b1c16; border-radius: 10px; padding: 1rem;">
-      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">03 — COHORT RETENTION (24M)</div>
+      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">03 —  24 MONTH USER RETENTION (%)</div>
       <div style="height: 200px;"><canvas id="chart-retention"></canvas></div>
     </div>
     <div style="background: #0b1c16; border-radius: 10px; padding: 1rem;">
-      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">04 — MONTHLY CHURN RATE (%)</div>
+      <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.6rem; font-weight: 600;">04 — MONTHLY CANCELLATION RATE (%)</div>
       <div style="height: 200px;"><canvas id="chart-churn"></canvas></div>
     </div>
   </div>
